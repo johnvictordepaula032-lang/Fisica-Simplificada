@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Física Simplificada v2.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #020617; color: white; font-family: 'Inter', sans-serif; }
+        
+        /* Efeito de iluminação de fundo */
+        .blur-effect {
+            position: fixed; pointer-events: none; border-radius: 50%; 
+            filter: blur(100px); z-index: -1; opacity: 0.15;
+        }
+
+        /* Estética Glassmorphism para os Cards */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-6px);
+            background: rgba(30, 41, 59, 0.6);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .active-tab { 
+            background-color: #2563eb !important; 
+            color: white !important; 
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+        }
+
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(15px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+
+        /* Esconder setas do input number */
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    </style>
+</head>
+<body class="min-h-screen overflow-x-hidden pb-10">
+
+    <div class="blur-effect bg-blue-600 w-[500px] h-[500px] -top-20 -left-20"></div>
+    <div class="blur-effect bg-purple-600 w-[400px] h-[400px] bottom-10 right-10"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6">
+        
+        <header class="pt-20 pb-16 text-center reveal">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 mb-8">
+                <span class="text-blue-400 text-xs font-bold uppercase tracking-widest italic">⚛️ Calculadora de Física</span>
+            </div>
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight">
+                Física <span class="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Simplificada</span>
+            </h1>
+            <p class="text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
+                Explore módulos interativos para cálculos precisos de cinemática, dinâmica, elétrica e termologia.
+            </p>
+        </header>
+
+        <nav class="flex justify-center mb-16">
+            <div id="tabs-container" class="grid grid-cols-2 md:grid-cols-4 gap-2 bg-slate-900/50 p-2 rounded-2xl border border-white/5 w-full max-w-3xl">
+                <button onclick="updateUI('cinematica')" id="btn-cinematica" class="tab-btn py-3 px-4 rounded-xl text-slate-400 font-semibold transition-all">🚀 Cinemática</button>
+                <button onclick="updateUI('dinamica')" id="btn-dinamica" class="tab-btn py-3 px-4 rounded-xl text-slate-400 font-semibold transition-all">⚖️ Dinâmica</button>
+                <button onclick="updateUI('eletricidade')" id="btn-eletricidade" class="tab-btn py-3 px-4 rounded-xl text-slate-400 font-semibold transition-all">⚡ Elétrica</button>
+                <button onclick="updateUI('termodinamica')" id="btn-termodinamica" class="tab-btn py-3 px-4 rounded-xl text-slate-400 font-semibold transition-all">🔥 Termo</button>
+            </div>
+        </nav>
+
+        <div id="section-header" class="flex flex-col md:flex-row items-center gap-6 mb-12 fade-in">
+            <div id="section-icon-box" class="p-5 rounded-3xl bg-blue-600/10 border border-blue-500/20 text-4xl shadow-xl">🚀</div>
+            <div class="text-center md:text-left">
+                <h2 id="section-title" class="text-4xl font-bold text-white mb-2">Cinemática</h2>
+                <p id="section-desc" class="text-slate-400 text-lg italic"></p>
+            </div>
+        </div>
+
+        <main id="calculators-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20"></main>
+
+        <footer class="py-12 border-t border-slate-800/50 text-center">
+            <p class="text-slate-500 text-sm italic">
+                Calculadora de Física • Use pontos para decimais • Constante g ≈ 9.8 m/s²
+            </p>
+        
+        </footer>
+    </div>
+
+    <script>
+        // Centralização de Dados e Fórmulas
+        const physicsData = {
+            cinematica: {
+                title: "Cinemática", icon: "🚀", desc: "O estudo do movimento e suas trajetórias no tempo.",
+                calcs: [
+                    { t: "Velocidade Média", f: "v = Δs / Δt", in: [{k:"d", l:"Distância (m)"}, {k:"t", l:"Tempo (s)"}], fn: v => v.d / v.t, u: "m/s" },
+                    { t: "Torricelli", f: "v² = v₀² + 2aΔs", in: [{k:"v0", l:"v₀ (m/s)"}, {k:"a", l:"a (m/s²)"}, {k:"ds", l:"Δs (m)"}], fn: v => Math.sqrt(v.v0**2 + 2*v.a*v.ds), u: "m/s" },
+                    { t: "Queda Livre (Altura)", f: "h = (g·t²) / 2", in: [{k:"t", l:"Tempo (s)"}, {k:"g", l:"Gravidade (m/s²)"}], fn: v => (v.g * v.t**2) / 2, u: "m" }
+                ]
+            },
+            dinamica: {
+                title: "Dinâmica", icon: "⚖️", desc: "Forças, massas e as leis que regem a aceleração.",
+                calcs: [
+                    { t: "2ª Lei de Newton", f: "F = m · a", in: [{k:"m", l:"Massa (kg)"}, {k:"a", l:"Aceleração (m/s²)"}], fn: v => v.m * v.a, u: "N" },
+                    { t: "Energia Cinética", f: "Ec = (m·v²) / 2", in: [{k:"m", l:"Massa (kg)"}, {k:"v", l:"Velocidade (m/s)"}], fn: v => 0.5 * v.m * (v.v**2), u: "J" },
+                    { t: "Trabalho (W)", f: "W = F · d", in: [{k:"f", l:"Força (N)"}, {k:"d", l:"Distância (m)"}], fn: v => v.f * v.d, u: "J" }
+                ]
+            },
+            eletricidade: {
+                title: "Eletricidade", icon: "⚡", desc: "Análise de tensões, correntes e resistência elétrica.",
+                calcs: [
+                    { t: "Lei de Ohm", f: "V = R · I", in: [{k:"r", l:"Resistência (Ω)"}, {k:"i", l:"Corrente (A)"}], fn: v => v.r * v.i, u: "V" },
+                    { t: "Potência Elétrica", f: "P = V · I", in: [{k:"v", l:"Tensão (V)"}, {k:"i", l:"Corrente (A)"}], fn: v => v.v * v.i, u: "W" }
+                ]
+            },
+            termodinamica: {
+                title: "Termodinâmica", icon: "🔥", desc: "Trocas de calor e transformações térmicas da matéria.",
+                calcs: [
+                    { t: "Calor Sensível", f: "Q = m·c·ΔT", in: [{k:"m", l:"Massa (kg)"}, {k:"c", l:"c (J/kgK)"}, {k:"dt", l:"ΔT (°C)"}], fn: v => v.m * v.c * v.dt, u: "J" }
+                ]
+            }
+        };
+
+        function updateUI(categoryKey) {
+            const cat = physicsData[categoryKey];
+            
+            // Atualizar Navegação
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active-tab'));
+            document.getElementById('btn-' + categoryKey).classList.add('active-tab');
+
+            // Atualizar Header da Seção
+            document.getElementById('section-title').innerText = cat.title;
+            document.getElementById('section-desc').innerText = cat.desc;
+            document.getElementById('section-icon-box').innerText = cat.icon;
+
+            // Renderizar Cards
+            const grid = document.getElementById('calculators-grid');
+            grid.innerHTML = ''; 
+
+            cat.calcs.forEach((calc, index) => {
+                const card = document.createElement('div');
+                card.className = "glass-card p-7 rounded-[2rem] flex flex-col gap-6 fade-in";
+                card.style.animationDelay = `${index * 0.1}s`;
+
+                const inputsHtml = calc.in.map(i => `
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-[10px] uppercase font-bold text-slate-500 tracking-widest ml-1">${i.l}</label>
+                        <input type="number" data-key="${i.k}" placeholder="0.00"
+                            class="calc-input bg-slate-950/50 border border-white/5 rounded-xl p-3 text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                    </div>
+                `).join('');
+
+                card.innerHTML = `
+                    <div class="relative">
+                        <h3 class="text-xl font-bold text-white mb-1">${calc.t}</h3>
+                        <div class="inline-block px-3 py-1 rounded-md bg-blue-500/5 border border-blue-500/10 font-mono text-xs text-blue-400">
+                            ${calc.f}
+                        </div>
+                    </div>
+                    <div class="grid gap-4">${inputsHtml}</div>
+                    <div class="flex gap-2">
+                        <button onclick="runCalc(this)" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-blue-900/40 transition-all active:scale-95">Calcular</button>
+                        <button onclick="resetCard(this)" class="px-4 bg-slate-800 hover:bg-slate-700 rounded-xl transition-colors">🔄</button>
+                    </div>
+                    <div class="res-box hidden p-4 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-center">
+                        <span class="text-[10px] uppercase font-bold text-blue-400 tracking-widest">Resultado</span>
+                        <div class="text-2xl font-black text-white mt-1">
+                            <span class="res-val">0</span> <small class="text-sm font-normal text-slate-400">${calc.u}</small>
+                        </div>
+                    </div>
+                `;
+                card.logic = calc.fn; // Vincula a fórmula ao elemento
+                grid.appendChild(card);
+            });
+        }
+
+        function runCalc(btn) {
+            const card = btn.closest('.glass-card');
+            const inputs = card.querySelectorAll('.calc-input');
+            const params = {};
+            
+            inputs.forEach(i => params[i.dataset.key] = parseFloat(i.value) || 0);
+            
+            const result = card.logic(params);
+            const resBox = card.querySelector('.res-box');
+            
+            card.querySelector('.res-val').innerText = isNaN(result) ? "Erro" : (result % 1 === 0 ? result : result.toFixed(3));
+            resBox.classList.remove('hidden');
+            resBox.classList.add('fade-in');
+        }
+
+        function resetCard(btn) {
+            const card = btn.closest('.glass-card');
+            card.querySelectorAll('input').forEach(i => i.value = '');
+            card.querySelector('.res-box').classList.add('hidden');
+        }
+
+        window.onload = () => updateUI('cinematica');
+   </script>
+<section class="max-w-4xl mx-auto px-6 py-10 fade-in">
+    <div class="glass-card p-6 rounded-2xl flex flex-col md:flex-row items-center justify-between border-l-4 border-l-blue-500">
+        <div class="mb-4 md:mb-0">
+            <h3 class="text-xl font-bold text-white">Queremos ouvir você! ⚛️</h3>
+            <p class="text-slate-400 text-sm">Ajude a melhorar o Física Simplificada com sua opinião.</p>
+        </div>
+        <a href="pagina.html" class="flex items-center text-blue-400 font-semibold hover:text-blue-300 transition-colors group">
+            Saiba mais 
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 transform group-hover:translate-x-2 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+        </a>
+    </div>
+</section>
+</body>
+</html>
