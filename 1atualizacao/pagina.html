@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Física Simplificada v2.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            background-color: #020617; 
+            color: white; 
+            font-family: 'Inter', sans-serif; 
+            overflow-x: hidden;
+        }
+        
+        /* Efeito de iluminação de fundo */
+        .blur-effect {
+            position: fixed; pointer-events: none; border-radius: 50%; 
+            filter: blur(100px); z-index: -1; opacity: 0.15;
+        }
+
+        /* Estética Glassmorphism para os Cards */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-6px);
+            background: rgba(30, 41, 59, 0.6);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .fade-in { animation: fadeIn 0.8s ease-out forwards; }
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(20px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+
+        .whatsapp-btn {
+            background: #25D366;
+            transition: all 0.3s ease;
+        }
+        .whatsapp-btn:hover {
+            background: #20ba5a;
+            box-shadow: 0 0 20px rgba(37, 211, 102, 0.4);
+        }
+    </style>
+</head>
+<body>
+<div class="max-w-6xl mx-auto px-6 pt-6">
+    <a href="index.html" class="inline-flex items-center text-slate-400 hover:text-blue-400 transition-all duration-300 group">
+        <div class="p-2 rounded-full group-hover:bg-blue-500/10 transition-all mr-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+        </div>
+        <span class="text-sm font-medium tracking-wide uppercase">Voltar para o início</span>
+    </a>
+</div>
+    <div class="blur-effect bg-blue-600 w-96 h-96 -top-20 -left-20"></div>
+    <div class="blur-effect bg-purple-600 w-96 h-96 bottom-0 right-0"></div>
+
+    <nav class="p-6">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-800 tracking-tighter text-blue-400">FÍSICA<span class="text-white">SIMPLIFICADA</span></h1>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 pt-10 pb-20">
+        
+        <header class="mb-12 fade-in">
+            <span class="text-blue-500 font-semibold tracking-widest uppercase text-sm">Comunidade Científica</span>
+            <h2 class="text-4xl md:text-5xl font-extrabold mt-2 mb-6 leading-tight">
+                Ajude-nos a transformar o <br>
+                <span class="bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent italic">ensino da Física! 🌌</span>
+            </h2>
+        </header>
+
+        <div class="glass-card p-8 md:p-12 rounded-[2.5rem] fade-in" style="animation-delay: 0.2s;">
+            <div class="grid md:grid-cols-2 gap-10 items-center">
+                
+                <div>
+                    <p class="text-slate-300 text-lg leading-relaxed mb-6">
+                        A ciência se constrói com colaboração, e o <strong>Física Simplificada</strong> não é diferente. Queremos saber se nossos conteúdos ajudaram nos seus estudos ou se você tem sugestões para torná-los ainda melhores.
+                    </p>
+                    
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-start">
+                            <div class="mt-1 bg-blue-500/20 p-2 rounded-lg">
+                                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <p class="ml-4 text-slate-400">Sugira novos temas e teorias</p>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="mt-1 bg-blue-500/20 p-2 rounded-lg">
+                                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <p class="ml-4 text-slate-400">Reporte erros ou peça clareza</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/40 border border-white/5 p-8 rounded-3xl text-center">
+                    <h3 class="text-xl font-bold mb-4">Nossa Central de Ideias</h3>
+                    <p class="text-slate-400 text-sm mb-8">
+                        Centralizamos nossos feedbacks em nosso grupo oficial para uma troca constante de conhecimento.
+                    </p>
+                    
+                    <a href="https://chat.whatsapp.com/H0NYdcN52jNJjID2bxRVym" target="_blank" class="whatsapp-btn inline-flex items-center justify-center w-full py-4 px-6 rounded-2xl text-white font-bold text-lg transform hover:scale-105 active:scale-95 transition-all">
+                        <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                        </svg>
+                        Entrar e Contribuir
+                    </a>
+                </div>
+
+            </div>
+
+            <div class="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center opacity-60">
+                <p class="text-xs uppercase tracking-[0.2em]">Física Simplificada &copy; 2026</p>
+                <p class="text-xs italic mt-4 md:mt-0">"Toda ação gera uma reação: sua opinião faz o site crescer."</p>
+            </div>
+        </div>
+
+    </main>
+
+</body>
+</html>
